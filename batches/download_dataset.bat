@@ -12,7 +12,9 @@ echo Checking or creating input data folder "%DATA_DIR%"
 if not exist %DATA_DIR% (mkdir %DATA_DIR%)
 
 echo Downloading LJSpeech-1.1 data file
-if not exist %DATA_DIR%\%LJS_ARCH% (curl %LJS_URL% -O %DATA_DIR%\%LJS_ARCH%)
+if not exist %DATA_DIR%\%LJS_ARCH% (
+    curl -o %DATA_DIR%\%LJS_ARCH% %LJS_URL%
+)
 
 echo Extracting LJSpeech-1.1 data file
 if exist %DATA_DIR%\%LJS_ARCH% (tar jxvf %DATA_DIR%\%LJS_ARCH%)

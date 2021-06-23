@@ -8,6 +8,7 @@ pretrained_models/
 *.pyc
 __pycache__
 LJSpeech-1.1.tar.bz2
+input/
 
 .idea/
 .DS_Store
