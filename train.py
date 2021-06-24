@@ -36,7 +36,7 @@ from collections import defaultdict, OrderedDict
 from contextlib import contextmanager
 
 import numpy as np
-import nvidia_dlprof_pytorch_nvtx as pyprof
+import pyprof
 import torch
 import torch.cuda.profiler as profiler
 import torch.distributed as dist
@@ -51,7 +51,7 @@ import common.tb_dllogger as logger
 from apex import amp
 from apex.optimizers import FusedAdam, FusedLAMB
 from apex.multi_tensor_apply import multi_tensor_applier
-import amp_C
+# import amp_C
 
 import common
 import data_functions
@@ -288,10 +288,10 @@ def apply_ema_decay(model, ema_model, decay):
         v.copy_(decay * v + (1 - decay) * st[k])
 
 
-def apply_multi_tensor_ema(model_weight_list, ema_model_weight_list, decay, overflow_buf):
-    if not decay:
-        return
-    amp_C.multi_tensor_axpby(65536, overflow_buf, [ema_model_weight_list, model_weight_list, ema_model_weight_list], decay, 1-decay, -1)
+# def apply_multi_tensor_ema(model_weight_list, ema_model_weight_list, decay, overflow_buf):
+#     if not decay:
+#         return
+#     amp_C.multi_tensor_axpby(65536, overflow_buf, [ema_model_weight_list, model_weight_list, ema_model_weight_list], decay, 1-decay, -1)
 
 
 def main():
@@ -407,7 +407,8 @@ def main():
     batch_to_gpu = data_functions.get_batch_to_gpu('FastPitch')
 
     if args.ema_decay:
-        ema_model_weight_list, model_weight_list, overflow_buf_for_ema = init_multi_tensor_ema(model, ema_model)
+        print("")
+        # ema_model_weight_list, model_weight_list, overflow_buf_for_ema = init_multi_tensor_ema(model, ema_model)
     else:
         ema_model_weight_list, model_weight_list, overflow_buf_for_ema = None, None, None
 
@@ -490,7 +491,7 @@ def main():
                         model.parameters(), args.grad_clip_thresh)
 
                 optimizer.step()
-                apply_multi_tensor_ema(model_weight_list, ema_model_weight_list, args.ema_decay, overflow_buf_for_ema)
+                # apply_multi_tensor_ema(model_weight_list, ema_model_weight_list, args.ema_decay, overflow_buf_for_ema)
 
                 iter_time = time.perf_counter() - iter_start_time
                 iter_mel_loss = iter_meta['mel_loss'].item()
