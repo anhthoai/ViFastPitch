@@ -19,6 +19,7 @@ from .acronyms import normalize_acronyms
 from .datestime import normalize_datestime
 from .letters_and_numbers import normalize_letters_and_numbers
 from .abbreviations import normalize_abbreviations
+from .vi_number_and_units import normalize_vi;
 
 
 # Regular expression matching whitespace:
@@ -90,3 +91,6 @@ def english_cleaners(text):
     text = expand_abbreviations(text)
     text = collapse_whitespace(text)
     return text
+
+def vietnamese_cleaners(text):
+    return normalize_vi(text)    

@@ -328,7 +328,7 @@ def _expand_roman(m):
     return str(result)
 
 
-def normalize(text:str):
+def normalize_vi(text:str):
     #roman number
     text = re.sub(_roman_re, _expand_roman, text)
     # range
